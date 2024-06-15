@@ -41,6 +41,12 @@ func NewDevice(hostname, api_key string) *LaMetricDevice {
 		httpclient: &http.Client{Timeout: httpTimeout, Transport: tr},
 	}
 
+	// Get the status of the device
+	err := lmd.GetStatus()
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	return lmd
 }
 
