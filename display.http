@@ -1,0 +1,32 @@
+@API = https://{{$dotenv HOSTNAME}}/api/v2/
+
+### Get API Version and endpoints
+GET {{API}} HTTP/1.1
+
+### Get device information
+GET {{API}}device HTTP/1.1
+
+### Get display settings
+GET {{API}}device/display HTTP/1.1
+
+### Set display brightness to 50%
+PUT {{API}}device/display HTTP/1.1
+
+{
+  "brightness": 10
+}
+
+### Set display off
+PUT {{API}}device/display HTTP/1.1
+
+{
+  "on": false
+}
+
+### Set display on
+PUT {{API}}device/display HTTP/1.1
+
+{
+  "on": true
+}
+
