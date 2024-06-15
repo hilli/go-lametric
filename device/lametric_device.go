@@ -19,7 +19,7 @@ type LaMetricDevice struct {
 }
 
 const (
-	httpTimeout = time.Duration(1) * time.Second
+	httpTimeout = time.Duration(5) * time.Second
 )
 
 // NewDevice creates a new LaMetricDevice client

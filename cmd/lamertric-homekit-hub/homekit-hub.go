@@ -9,6 +9,7 @@ import (
 
 	"github.com/brutella/hap"
 	"github.com/brutella/hap/accessory"
+	"github.com/brutella/hap/characteristic"
 	lmd "github.com/hilli/go-lametric/device"
 )
 
@@ -21,13 +22,28 @@ func main() {
 
 	// Create the light accessory
 	LMdevice := accessory.NewLightbulb(accessory.Info{Name: deviceName, Model: laMetricDevice.Status.Model, Manufacturer: "LaMetric"})
+	LMdevice.Lightbulb.On.SetValue(laMetricDevice.Status.Display.On) // Set to the current state of the light
 
+	// Add brightness to the light accessory
+	brightness := characteristic.NewBrightness()
+	brightness.SetValue(laMetricDevice.Status.Display.Brightness)
+	brightness.SetMinValue(laMetricDevice.Status.Display.BrightnessLimit.Min)
+	brightness.SetMaxValue(laMetricDevice.Status.Display.BrightnessLimit.Max)
+	brightness.SetStepValue(1)
+	brightness.OnSetRemoteValue(func(value int) error {
+		err := laMetricDevice.SetBrightness(value)
+		log.Printf("%s brightness changed to: %d", laMetricDevice.Status.Name, value)
+		return err
+	})
+	LMdevice.Lightbulb.Cs = append(LMdevice.Lightbulb.Cs, brightness.C)
+
+	// Handle the on/off state of the light
 	LMdevice.Lightbulb.On.OnValueRemoteUpdate(func(on bool) {
 		if on {
-			log.Println("Light is on")
+			log.Printf("%s switched on\n", laMetricDevice.Status.Name)
 			laMetricDevice.On()
 		} else {
-			log.Println("Light is off")
+			log.Printf("%s switched off\n", laMetricDevice.Status.Name)
 			laMetricDevice.Off()
 		}
 	})

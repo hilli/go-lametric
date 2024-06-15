@@ -2,7 +2,7 @@
 version: '3'
 
 vars:
-  BIN: bin/lametric-device-example
+  BIN: bin/lametric-homekit-hub
 
 interval: 500ms # default interval for watch tasks is 5s
 
@@ -61,7 +61,7 @@ tasks:
   build:
     desc: Build the binary
     cmds:
-      - go build -o {{.BIN}}
+      - go build -o {{.BIN}} cmd/lamertric-homekit-hub/homekit-hub.go
     sources:
       - "**/*.go"
       - go.mod
