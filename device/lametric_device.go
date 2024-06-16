@@ -13,7 +13,7 @@ import (
 type LaMetricDevice struct {
 	hostname   string
 	APIURL     string
-	api_key    string
+	API_KEY    string
 	Status     *Status
 	httpclient *http.Client
 }
@@ -36,7 +36,7 @@ func NewDevice(hostname, api_key string) *LaMetricDevice {
 	}
 	lmd := &LaMetricDevice{
 		hostname:   hostname,
-		api_key:    api_key,
+		API_KEY:    api_key,
 		APIURL:     APIURL,
 		httpclient: &http.Client{Timeout: httpTimeout, Transport: tr},
 	}
@@ -126,5 +126,5 @@ func (lmd *LaMetricDevice) GetStatus() error {
 func (lmd *LaMetricDevice) addRequiredHeaders(req *http.Request) {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
-	req.SetBasicAuth("dev", lmd.api_key)
+	req.SetBasicAuth("dev", lmd.API_KEY)
 }
