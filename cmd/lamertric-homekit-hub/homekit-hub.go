@@ -21,8 +21,15 @@ func main() {
 	deviceName := laMetricDevice.Status.Name
 
 	// Create the light accessory
-	LMdevice := accessory.NewLightbulb(accessory.Info{Name: deviceName, Model: laMetricDevice.Status.Model, Manufacturer: "LaMetric"})
-	LMdevice.Lightbulb.On.SetValue(laMetricDevice.Status.Display.On) // Set to the current state of the light
+	LMdevice := accessory.NewLightbulb(accessory.Info{
+		Name:         deviceName,
+		Model:        laMetricDevice.Status.Model,
+		Manufacturer: "LaMetric (github.com/hilli/go-lametric)",
+		SerialNumber: laMetricDevice.Status.SerialNumber,
+	})
+
+	// Set to the current state of the light
+	LMdevice.Lightbulb.On.SetValue(laMetricDevice.Status.Display.On)
 
 	// Add brightness to the light accessory
 	brightness := characteristic.NewBrightness()
