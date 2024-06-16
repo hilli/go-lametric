@@ -6,6 +6,10 @@ vars:
 
 interval: 500ms # default interval for watch tasks is 5s
 
+# Environment variables
+# You can use the `.env` file to store your environment variables
+# The variables are specified in the `.env.sample` file
+# They are used in test-integration and run tasks.
 dotenv: ['.env']
 
 tasks:
@@ -68,6 +72,18 @@ tasks:
       - go.sum
     generates:
       - "{{.BIN}}"
+
+  container:
+    desc: Build the container
+    cmds:
+      - docker build -t hilli/lametric-homekit-hub .
+    deps: [test]
+
+  container-push:
+    desc: Push the container
+    cmds:
+      - docker push hilli/lametric-homekit-hub
+    deps: [container]
 
   run:
     desc: Run the binary

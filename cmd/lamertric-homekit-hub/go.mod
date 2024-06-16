@@ -3,8 +3,13 @@ module giithub.com/hilli/go-lametric/cmd/lametric-home-hub
 go 1.22.4
 
 require (
+	github.com/brutella/hap v0.0.33
+	github.com/hilli/go-lametric v0.0.0-20240616072219-a53fb6a2dd5a
+	github.com/hilli/lametric-my-data-diy-go v0.0.0-20240609074625-e3efff6c40eb
+)
+
+require (
 	github.com/brutella/dnssd v1.2.10 // indirect
-	github.com/brutella/hap v0.0.33 // indirect
 	github.com/go-chi/chi v1.5.4 // indirect
 	github.com/miekg/dns v1.1.54 // indirect
 	github.com/tadglines/go-pkgs v0.0.0-20210623144937-b983b20f54f9 // indirect

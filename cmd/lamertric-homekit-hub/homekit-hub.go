@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -11,11 +12,23 @@ import (
 	"github.com/brutella/hap/accessory"
 	"github.com/brutella/hap/characteristic"
 	lmd "github.com/hilli/go-lametric/device"
+	myDIY "github.com/hilli/lametric-my-data-diy-go"
 )
 
 func main() {
 	// Create a new laMetricDevice
-	laMetricDevice := lmd.NewDevice(os.Getenv("LAMETRIC_HOSTNAME"), os.Getenv("LAMETRIC_API_KEY"))
+	hostname := os.Getenv("LAMETRIC_HOSTNAME")
+	api_key := os.Getenv("LAMETRIC_API_KEY")
+
+	if hostname == "" || api_key == "" {
+		log.Println("LAMETRIC_HOSTNAME or LAMETRIC_API_KEY not set - They shoud be set in the environment variables")
+		os.Exit(1)
+	}
+
+	laMetricDevice := lmd.NewDevice(hostname, api_key)
+
+	// Send notifications to the device about brightness levels
+	diyPushURL := os.Getenv("LAMETRIC_DIY_PUSH_URL")
 
 	// Get the name of the device
 	deviceName := laMetricDevice.Status.Name
@@ -39,6 +52,7 @@ func main() {
 	brightness.SetStepValue(1)
 	brightness.OnSetRemoteValue(func(value int) error {
 		err := laMetricDevice.SetBrightness(value)
+		pushBrightness(diyPushURL, laMetricDevice.API_KEY, value)
 		log.Printf("%s brightness changed to: %d", laMetricDevice.Status.Name, value)
 		return err
 	})
@@ -83,4 +97,23 @@ func main() {
 	// Run the server.
 	server.ListenAndServe(ctx)
 
+}
+
+func pushBrightness(url, api_key string, brightness int) {
+	if url == "" {
+		return
+	}
+	// Setup frame
+	frame := myDIY.MyDataFrame{
+		Text: fmt.Sprintf("%d%% light", brightness),
+		Icon: "22581",
+	}
+	frames := myDIY.MyDataFrames{}
+	frames.AddFrame(frame)
+
+	// Send the data to the device
+	err := frames.Push(url, api_key)
+	if err != nil {
+		log.Printf("Error pushing data: %s", err)
+	}
 }

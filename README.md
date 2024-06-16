@@ -1,9 +1,18 @@
 # go-lametric
 
-Go lib for controlling the LaMetric devices (SKY and TIME (2022 or later)).
+Go lib for controlling the LaMetric devices (SKY and TIME (2022 or later). 
 
-So far only display on/off and brightness controls.
+Also: `lametric-homekit-hub` - Bridge LaMetric devices with Apple Home.
 
+So far only display on/off and brightness controls, as that is what make the most sense to support.
+
+## Using the Apple Home 
+
+Check the ]releases](https://github.com/hilli/go-lametric/releases) for something suitable. Setup the environment to point to the LaMetric device and set the key
+
+- `LAMETRIC_HOSTNAME` to the IP or a hostname on your network pointing to your device.
+- `LAMETRIC_API_KEY` to an API key. Get it from the settings on the device in the LaMetric app.
+- `LAMETRIC_DIY_PUSH_URL` (optional) to the DIY app's push URL.
 
 ## Developing
 
